@@ -1,0 +1,943 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{max-width:680px;font-family:var(--font-sans)}
+.hdr{background:#1a1a1a;color:#f5e6c8;padding:14px 18px;border-radius:var(--border-radius-lg) var(--border-radius-lg) 0 0;display:flex;justify-content:space-between;align-items:center}
+.hdr-t{font-size:15px;font-weight:500}.hdr-s{font-size:11px;color:#a89070;margin-top:2px}
+.mnav{display:flex;align-items:center;gap:8px}
+.mnav button{background:rgba(255,255,255,0.15);border:none;color:#f5e6c8;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:13px}
+.mnav button:hover{background:rgba(255,255,255,0.25)}
+.mlbl{font-size:14px;font-weight:500;min-width:80px;text-align:center}
+.tabs{display:flex;background:var(--color-background-primary);border-left:0.5px solid var(--color-border-tertiary);border-right:0.5px solid var(--color-border-tertiary)}
+.tab{flex:1;padding:9px 2px;font-size:11px;text-align:center;cursor:pointer;color:var(--color-text-secondary);border:none;background:none;border-bottom:2px solid transparent}
+.tab.active{color:#c0581a;border-bottom-color:#c0581a;font-weight:500}
+.panel{background:var(--color-background-primary);padding:14px;border:0.5px solid var(--color-border-tertiary);border-top:none;border-radius:0 0 var(--border-radius-lg) var(--border-radius-lg)}
+.sl{font-size:11px;font-weight:500;color:var(--color-text-secondary);letter-spacing:0.06em;margin-bottom:8px}
+.mg3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.mg2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
+.mc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+.mc-l{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px}
+.mc-v{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.green{color:#2a7a3b!important}.red{color:#c0392b!important}.orange{color:#c0581a!important}
+hr.dv{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:10px 0}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.fg{display:flex;flex-direction:column;gap:3px}
+.fl{font-size:12px;color:var(--color-text-secondary)}
+input[type=number],input[type=text],select{width:100%;padding:6px 8px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary)}
+.btn{padding:8px 16px;border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary)}
+.btn-p{background:#c0581a;color:#fff;border-color:#c0581a}.btn-p:hover{background:#a04614}
+.btn-ev{background:#7b5ea7;color:#fff;border-color:#7b5ea7}.btn-ev:hover{background:#5f4582}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn:hover{background:var(--color-background-secondary)}
+.br{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.ct{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed}
+.ct th{text-align:left;font-size:10px;font-weight:500;color:var(--color-text-secondary);padding:4px 5px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ct td{padding:5px 5px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:middle}
+.ct .sr td{font-weight:500;border-top:0.5px solid var(--color-border-secondary)!important;border-bottom:none!important}
+.cw{position:relative;width:100%;height:180px;margin-bottom:6px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--color-text-secondary);margin-bottom:8px}
+.legend span{display:flex;align-items:center;gap:4px}
+.ld{width:10px;height:10px;border-radius:2px;display:inline-block}
+.pl-t{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
+.pl-t td{padding:6px 8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.pl-t td:first-child{color:var(--color-text-secondary);width:55%}
+.pl-t td:last-child{text-align:right;font-weight:500}
+.pl-tot td{font-size:15px;font-weight:500;border-top:1px solid var(--color-border-primary)!important;border-bottom:none!important}
+.pl-s td{font-size:11px;font-weight:500;color:var(--color-text-secondary);letter-spacing:0.05em;padding-top:10px;border-bottom:none!important}
+.rate-bar-bg{background:var(--color-border-tertiary);border-radius:3px;height:5px;width:100%;margin-top:3px}
+.rate-bar{height:5px;border-radius:3px;background:#c0581a}
+.genka-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:8px}
+.genka-name{font-size:13px;font-weight:500;margin-bottom:5px}
+.genka-row{display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);margin-bottom:2px}
+.genka-row span:last-child{color:var(--color-text-primary);font-weight:500}
+.upload-area{border:1.5px dashed var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:16px;text-align:center;cursor:pointer;margin-bottom:12px}
+.upload-area:hover,.upload-area.drag{background:var(--color-background-secondary)}
+.up-st{font-size:12px;margin-top:6px;padding:5px 10px;border-radius:var(--border-radius-md);display:none}
+.st-ok{background:#eaf3de;color:#27500a}.st-err{background:#fcebeb;color:#791f1f}
+.st-warn{background:#faeeda;color:#633806}.st-info{background:#e6f1fb;color:#0c447c}
+.del-btn{background:none;border:none;color:var(--color-text-secondary);cursor:pointer;font-size:13px;padding:1px 5px}
+.del-btn:hover{color:#c0392b}
+.tag{font-size:10px;padding:2px 6px;border-radius:20px;font-weight:500;white-space:nowrap}
+.tag-match{background:#eaf3de;color:#27500a}.tag-alias{background:#e6f1fb;color:#0c447c}
+.tag-saved{background:#faeeda;color:#633806}.tag-none{background:#fcebeb;color:#791f1f}
+.preview-wrap{max-height:220px;overflow-y:auto;margin-bottom:10px}
+.month-confirm{background:#e6f1fb;border:0.5px solid #b5d4f4;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:12px;font-size:13px;color:#0c447c;display:none;align-items:center;gap:10px;flex-wrap:wrap}
+.month-confirm-inner{display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%}
+.ev-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-left:3px solid #7b5ea7;border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px}
+.ev-card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.ev-card-title{font-size:13px;font-weight:500}
+.ev-badge{font-size:10px;padding:2px 7px;border-radius:20px;background:#ede8f7;color:#4a2f8c;font-weight:500}
+.ev-section{font-size:11px;font-weight:500;color:#7b5ea7;margin:10px 0 6px;letter-spacing:0.04em}
+.ev-mini-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.ev-mini{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:7px 8px}
+.ev-mini-l{font-size:10px;color:var(--color-text-secondary);margin-bottom:2px}
+.ev-mini-v{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.item-row-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:6px}
+.item-row-tbl th{font-size:10px;font-weight:500;color:var(--color-text-secondary);padding:3px 4px;border-bottom:0.5px solid var(--color-border-tertiary);text-align:left}
+.item-row-tbl td{padding:4px 3px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:middle}
+.item-row-tbl td input,.item-row-tbl td select{padding:4px 6px;font-size:12px}
+.item-row-tbl .calc-cell{font-size:11px;color:var(--color-text-secondary);text-align:right;white-space:nowrap}
+.expense-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.warn-banner{background:#faeeda;border:0.5px solid #f5c475;border-radius:var(--border-radius-md);padding:9px 12px;margin-bottom:10px;font-size:12px;color:#633806;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.warn-banner button{font-size:11px;padding:4px 10px;flex-shrink:0}
+/* 修正ハイライト */
+.updated-badge{font-size:10px;background:#eaf3de;color:#27500a;padding:2px 7px;border-radius:20px;font-weight:500;margin-left:6px}
+
+/* 年度集計 */
+.annual-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:12px}
+.annual-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.annual-title{font-size:15px;font-weight:600;color:var(--color-text-primary)}
+.annual-nav{display:flex;gap:6px;align-items:center}
+.annual-nav button{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:6px;padding:5px 10px;cursor:pointer;font-size:12px;color:var(--color-text-primary)}
+.annual-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.annual-mini{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 10px}
+.annual-mini-l{font-size:10px;color:var(--color-text-secondary);margin-bottom:3px}
+.annual-mini-v{font-size:18px;font-weight:600;color:var(--color-text-primary)}
+@media(max-width:520px){.annual-grid{grid-template-columns:repeat(2,1fr)}}
+
+</style>
+
+<div class="app">
+<div class="hdr">
+  <div><div class="hdr-t">揚げ手羽専門 かま屋</div><div class="hdr-s">月間収支管理 ＋ 原価自動計算</div></div>
+  <div class="mnav">
+    <button onclick="chM(-1)">◀</button>
+    <div class="mlbl" id="mlbl"></div>
+    <button onclick="chM(1)">▶</button>
+  </div>
+</div>
+<div class="tabs">
+  <button class="tab active" onclick="sw('summary')">サマリー</button>
+  <button class="tab" onclick="sw('fiscal')">年度</button>
+  <button class="tab" onclick="sw('airregi')">エアレジ</button>
+  <button class="tab" onclick="sw('event')">イベント</button>
+  <button class="tab" onclick="sw('mapping')">紐づけ</button>
+  <button class="tab" onclick="sw('genka')">原価</button>
+  <button class="tab" onclick="sw('fixed')">固定費</button>
+  <button class="tab" onclick="sw('pl')">損益</button>
+</div>
+<div class="panel">
+
+<!-- SUMMARY -->
+<div id="tab-summary">
+  <div id="warn-area"></div>
+  <div class="sl">今月の収支</div>
+  <div class="mg3">
+    <div class="mc"><div class="mc-l">売上合計</div><div class="mc-v" id="s-sales">¥0</div></div>
+    <div class="mc"><div class="mc-l">原価合計</div><div class="mc-v orange" id="s-cogs">¥0</div></div>
+    <div class="mc"><div class="mc-l">固定費合計</div><div class="mc-v orange" id="s-fixed">¥0</div></div>
+  </div>
+  <div class="mg3">
+    <div class="mc"><div class="mc-l">粗利益</div><div class="mc-v" id="s-gross">¥0</div></div>
+    <div class="mc"><div class="mc-l">営業利益</div><div class="mc-v" id="s-op">¥0</div></div>
+    <div class="mc"><div class="mc-l">利益率</div><div class="mc-v" id="s-rate">0%</div></div>
+  </div>
+  <div class="mg3">
+    <div class="mc"><div class="mc-l">エアレジ売上</div><div class="mc-v" id="s-ar-sales">¥0</div></div>
+    <div class="mc"><div class="mc-l" style="color:#7b5ea7">イベント売上</div><div class="mc-v" style="color:#7b5ea7" id="s-ev-sales">¥0</div></div>
+    <div class="mc"><div class="mc-l">原価率（平均）</div><div class="mc-v" id="s-crate">0%</div></div>
+  </div>
+  <hr class="dv">
+  <div class="sl">月別推移（12ヶ月）</div>
+  <div class="legend">
+    <span><span class="ld" style="background:#c0581a"></span>売上</span>
+    <span><span class="ld" style="background:#888780"></span>原価＋固定費</span>
+    <span><span class="ld" style="background:#2a7a3b"></span>利益</span>
+  </div>
+  <div class="cw"><canvas id="trendChart" role="img" aria-label="月別推移グラフ">月別推移</canvas></div>
+  <hr class="dv">
+  <div class="sl">商品別 粗利ランキング（エアレジ分）</div>
+  <table class="ct">
+    <thead><tr><th style="width:35%">商品</th><th style="width:14%">数量</th><th style="width:20%">売上</th><th style="width:20%">粗利</th><th style="width:11%">率</th></tr></thead>
+    <tbody id="rank-body"></tbody>
+  </table>
+</div>
+
+
+<!-- FISCAL YEAR -->
+<div id="tab-fiscal" style="display:none">
+  <div class="sl">年度サマリー（9月末決算）</div>
+  <div class="annual-card">
+    <div class="annual-head">
+      <div>
+        <div class="annual-title" id="fy-title">年度合計</div>
+        <div style="font-size:11px;color:var(--color-text-secondary)" id="fy-range">10月〜翌9月</div>
+      </div>
+      <div class="annual-nav">
+        <button onclick="chFY(-1)">◀</button>
+        <button onclick="setCurrentFY()">今の年度</button>
+        <button onclick="chFY(1)">▶</button>
+      </div>
+    </div>
+    <div class="annual-grid">
+      <div class="annual-mini"><div class="annual-mini-l">売上合計</div><div class="annual-mini-v" id="fy-sales">¥0</div></div>
+      <div class="annual-mini"><div class="annual-mini-l">原価合計</div><div class="annual-mini-v orange" id="fy-cogs">¥0</div></div>
+      <div class="annual-mini"><div class="annual-mini-l">固定費合計</div><div class="annual-mini-v orange" id="fy-fixed">¥0</div></div>
+      <div class="annual-mini"><div class="annual-mini-l">営業利益</div><div class="annual-mini-v" id="fy-profit">¥0</div></div>
+    </div>
+    <table class="ct">
+      <thead><tr><th style="width:22%">月</th><th style="width:20%">売上</th><th style="width:20%">原価</th><th style="width:20%">固定費</th><th style="width:18%">利益</th></tr></thead>
+      <tbody id="fy-month-rows"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- AIRREGI -->
+<div id="tab-airregi" style="display:none">
+  <div class="sl">エアレジ 商品単位CSV 取込</div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">バックオフィス → 商品別売上 → 商品単位で表示 → CSVダウンロード（PC のみ）</div>
+  <div class="upload-area" id="drop-zone" onclick="document.getElementById('csv-in').click()" ondragover="onDrag(event)" ondragleave="offDrag()" ondrop="onDrop(event)">
+    <div style="font-size:20px;margin-bottom:4px">📄</div>
+    <div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">CSVをドロップ または クリックして選択</div>
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-top:2px">対象月を自動判定 → 表記ゆれ吸収 → 原価自動計算</div>
+    <input type="file" id="csv-in" accept=".csv" style="display:none" onchange="handleFile(this.files[0])">
+    <div class="up-st" id="up-status"></div>
+  </div>
+  <div class="month-confirm" id="month-confirm">
+    <div class="month-confirm-inner">
+      <span id="month-confirm-msg"></span>
+      <div style="display:flex;gap:6px;margin-left:auto">
+        <button class="btn btn-sm" id="month-yes-btn">この月に取込む</button>
+        <button class="btn btn-sm" onclick="hideMonthConfirm()">キャンセル</button>
+      </div>
+    </div>
+  </div>
+  <div id="import-preview" style="display:none">
+    <div class="sl">取込プレビュー</div>
+    <div class="preview-wrap">
+      <table class="ct" id="preview-tbl">
+        <thead><tr><th style="width:30%">CSV商品名</th><th style="width:12%">数量</th><th style="width:17%">売上</th><th style="width:12%">マッチ</th><th style="width:29%">原価マスタ</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="br">
+      <button class="btn" onclick="cancelImport()">キャンセル</button>
+      <button class="btn btn-p" onclick="confirmImport()">反映する</button>
+    </div>
+  </div>
+  <hr class="dv">
+  <div class="sl">今月の取込済みデータ</div>
+  <div id="ar-imported"><p style="font-size:13px;color:var(--color-text-secondary);padding:8px 0">まだ取込がありません</p></div>
+</div>
+
+<!-- EVENT -->
+<div id="tab-event" style="display:none">
+  <div class="sl">イベント出店登録</div>
+  <div class="ev-card">
+    <div class="ev-card-hdr"><div class="ev-card-title">新しいイベントを追加</div></div>
+    <div class="r2">
+      <div class="fg"><label class="fl">イベント名</label><input type="text" id="ev-name" placeholder="例: ○○マルシェ出店"></div>
+      <div class="fg"><label class="fl">開催日</label><input type="text" id="ev-date" placeholder="例: 4/12"></div>
+    </div>
+    <div class="ev-section">商品明細</div>
+    <table class="item-row-tbl" id="ev-items-tbl">
+      <thead><tr><th style="width:34%">商品名</th><th style="width:14%">販売数</th><th style="width:18%">売価(円)</th><th style="width:18%">小計</th><th style="width:16%">原価計</th><th style="width:0%"></th></tr></thead>
+      <tbody id="ev-items-body"></tbody>
+    </table>
+    <button class="btn btn-sm" onclick="addItemRow()" style="margin-bottom:8px">＋ 商品行を追加</button>
+    <div class="ev-section">その他経費</div>
+    <div id="ev-expenses-body"></div>
+    <button class="btn btn-sm" onclick="addExpenseRow()" style="margin-bottom:8px">＋ 経費を追加</button>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;font-size:12px;margin-bottom:8px">
+      <span style="color:var(--color-text-secondary)">売上: </span><span id="prev-sales" style="font-weight:500">¥0</span>
+      <span style="color:var(--color-text-secondary);margin-left:12px">商品原価: </span><span id="prev-cogs" style="font-weight:500">¥0</span>
+      <span style="color:var(--color-text-secondary);margin-left:12px">経費: </span><span id="prev-exp" style="font-weight:500">¥0</span>
+      <span style="color:var(--color-text-secondary);margin-left:12px">利益: </span><span id="prev-profit" style="font-weight:500">¥0</span>
+    </div>
+    <div class="fg" style="margin-bottom:8px"><label class="fl">メモ</label><input type="text" id="ev-memo" placeholder="来客数・気づきなど"></div>
+    <div class="br"><button class="btn btn-ev" onclick="saveEvent()">イベントを登録</button></div>
+  </div>
+  <div id="ev-list-wrap"></div>
+</div>
+
+<!-- MAPPING -->
+<div id="tab-mapping" style="display:none">
+  <div class="sl">保存済み紐づけマッピング</div>
+  <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">CSV取込時に自動保存。次回から自動マッチします。</div>
+  <div id="mapping-list"></div>
+</div>
+
+<!-- GENKA -->
+<div id="tab-genka" style="display:none">
+  <div id="genka-warn-area"></div>
+  <div class="sl">商品別原価マスタ</div>
+  <div id="genka-list"></div>
+  <hr class="dv">
+  <div class="sl">原価を追加・編集</div>
+  <div class="r2">
+    <div class="fg"><label class="fl">商品名</label><input type="text" id="g-name" placeholder="例: 手羽の日（10本）"></div>
+    <div class="fg"><label class="fl">販売価格（円）</label><input type="number" id="g-price" placeholder="1600" min="0"></div>
+  </div>
+  <div class="r2">
+    <div class="fg"><label class="fl">原価（円）</label><input type="number" id="g-cost" placeholder="687" min="0"></div>
+    <div class="fg"><label class="fl">手羽本数</label><input type="number" id="g-qty" placeholder="10" min="0"></div>
+  </div>
+  <div class="br"><button class="btn btn-p" onclick="addGenka()">登録・更新</button></div>
+</div>
+
+<!-- FIXED -->
+<div id="tab-fixed" style="display:none">
+  <div class="sl">固定費（毎月変わらない費用）</div>
+  <table class="ct" style="margin-bottom:12px">
+    <thead><tr><th style="width:42%">費目</th><th style="width:44%">金額（円）</th><th style="width:14%"></th></tr></thead>
+    <tbody id="fixed-body"></tbody>
+    <tfoot><tr class="sr"><td>合計</td><td id="fixed-total" style="text-align:right">¥0</td><td></td></tr></tfoot>
+  </table>
+  <hr class="dv">
+  <div class="sl">費目を追加</div>
+  <div class="r2">
+    <div class="fg"><label class="fl">費目名</label><input type="text" id="fi-item" placeholder="例: 駐車場代"></div>
+    <div class="fg"><label class="fl">金額（円）</label><input type="number" id="fi-amount" placeholder="0" min="0"></div>
+  </div>
+  <div class="br"><button class="btn btn-p" onclick="addFixed()">追加</button></div>
+</div>
+
+<!-- P&L -->
+<div id="tab-pl" style="display:none">
+  <div class="sl">損益計算書</div>
+  <table class="pl-t">
+    <tbody>
+      <tr class="pl-s"><td colspan="2">売上</td></tr>
+      <tr><td>　エアレジ売上</td><td id="pl-ar-sales">¥0</td></tr>
+      <tr><td>　イベント売上</td><td id="pl-ev-sales">¥0</td></tr>
+      <tr style="font-weight:500"><td>売上合計</td><td id="pl-sales">¥0</td></tr>
+      <tr class="pl-s"><td colspan="2">売上原価</td></tr>
+      <tr><td>　エアレジ原価（自動計算）</td><td id="pl-ar-cogs">¥0</td></tr>
+      <tr><td>　イベント商品原価</td><td id="pl-ev-cogs">¥0</td></tr>
+      <tr><td>　イベントその他経費</td><td id="pl-ev-exp">¥0</td></tr>
+      <tr style="font-weight:500"><td>原価合計</td><td id="pl-cogs">¥0</td></tr>
+      <tr style="font-weight:500"><td>粗利益</td><td id="pl-gross">¥0</td></tr>
+      <tr><td style="font-size:12px">　粗利率</td><td id="pl-gross-rate" style="font-size:12px;text-align:right;font-weight:400">0%</td></tr>
+      <tr class="pl-s"><td colspan="2">固定費（販管費）</td></tr>
+      <tbody id="pl-fixed-rows"></tbody>
+      <tr style="font-weight:500"><td>固定費合計</td><td id="pl-fixed-tot">¥0</td></tr>
+      <tr class="pl-tot"><td>営業利益</td><td id="pl-profit">¥0</td></tr>
+      <tr><td style="font-size:12px">　営業利益率</td><td id="pl-op-rate" style="font-size:12px;text-align:right;font-weight:400">0%</td></tr>
+    </tbody>
+  </table>
+  <button onclick="exportCSV()" style="width:100%;padding:10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:13px;cursor:pointer;margin-top:10px">CSVエクスポート（Excel用）</button>
+  <hr class="dv">
+  <div class="sl">データバックアップ</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button onclick="backupData()" class="btn btn-sm" style="flex:1">📥 JSONバックアップをダウンロード</button>
+    <button onclick="document.getElementById('restore-input').click()" class="btn btn-sm" style="flex:1">📤 バックアップから復元</button>
+    <input type="file" id="restore-input" accept=".json" style="display:none" onchange="restoreFromBackup(this.files[0])">
+  </div>
+  <div style="font-size:11px;color:var(--color-text-secondary);margin-top:6px">バックアップはJSONファイルで保存されます。別のブラウザや端末への移行にも使えます。</div>
+</div>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const MONTHS=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+const EXPENSE_TYPES=['LPガス','出店料','交通費','人件費（イベント用）','その他'];
+let cY=new Date().getFullYear(),cM=new Date().getMonth();
+const DB={};
+let pendingImport=[],pendingYear=null,pendingMonth=null,trendChart=null;
+
+/* ---- 原価マスタ（全商品 売価・原価 設定済み） ---- */
+let genkaMaster=[
+  {name:'手羽先（1本）',    price:170,  cost:69,   teba:1},
+  {name:'手羽先（5本）',    price:800,  cost:335,  teba:5},
+  {name:'手羽先（10本）',   price:1600, cost:687,  teba:10},
+  {name:'手羽先（15本）',   price:2400, cost:1011, teba:15},
+  {name:'手羽先（20本）',   price:3200, cost:1335, teba:20},
+  {name:'手羽先（30本）',   price:4800, cost:2001, teba:30},
+  {name:'手羽の日（1本）',  price:140,  cost:69,   teba:1},
+  {name:'手羽の日（5本）',  price:700,  cost:335,  teba:5},
+  {name:'手羽の日（10本）', price:1400, cost:687,  teba:10},
+  {name:'手羽の日（15本）', price:2100, cost:1011, teba:15},
+  {name:'手羽の日（20本）', price:2800, cost:1335, teba:20},
+  {name:'手羽の日（30本）', price:4200, cost:2001, teba:30},
+  {name:'かま屋セット',      price:2500, cost:1051, teba:10},
+  {name:'ちょい飲みセット中',price:650,  cost:177,  teba:2},   // ← 650円に修正
+  {name:'ちょい飲みセット大',price:750,  cost:236,  teba:3},
+  {name:'冷凍手羽',          price:140,  cost:55,   teba:1},
+  {name:'とり皮揚げ',        price:600,  cost:236,  teba:0},
+  {name:'戸田塩ポテト（中）',price:350,  cost:111,  teba:0},
+  {name:'戸田塩ポテト（大）',price:450,  cost:145,  teba:0},
+  {name:'えびせん',          price:200,  cost:40,   teba:0},   // ← 原価40円に修正
+];
+let savedMapping={};
+
+/* ---- ユーティリティ ---- */
+function normalize(s){if(!s)return'';return s.trim().replace(/[\s\u3000\u00a0]+/g,'').replace(/[（(]/g,'(').replace(/[）)]/g,')').replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0)).replace(/[Ａ-Ｚａ-ｚ]/g,c=>String.fromCharCode(c.charCodeAt(0)-0xFEE0)).toLowerCase();}
+function matchGenka(n){const nm=normalize(n);if(savedMapping[n]){const g=genkaMaster.find(x=>x.name===savedMapping[n]);if(g)return{genka:g,method:'saved'};}const ex=genkaMaster.find(g=>normalize(g.name)===nm);if(ex)return{genka:ex,method:'exact'};const pa=genkaMaster.find(g=>{const gn=normalize(g.name);return nm.length>=3&&(gn===nm||nm.startsWith(gn)||gn.startsWith(nm));});if(pa)return{genka:pa,method:'partial'};return{genka:null,method:'none'};}
+function methodLabel(m){if(m==='saved')return'<span class="tag tag-saved">保存済み</span>';if(m==='exact')return'<span class="tag tag-match">自動一致</span>';if(m==='partial')return'<span class="tag tag-alias">部分一致</span>';return'<span class="tag tag-none">未マッチ</span>';}
+function mkKey(y,m){const Y=y!==undefined?y:cY;const M=m!==undefined?m:cM;return Y+'-'+(M<9?'0':'')+(M+1);}
+function gM(y,m){const k=mkKey(y,m);if(!DB[k])DB[k]={airregiSales:[],events:[],fixed:[]};return DB[k];}
+const DEF_FIXED=[{id:1,item:'家賃',amount:0},{id:2,item:'人件費',amount:0},{id:3,item:'光熱費（電気・ガス・水道）',amount:0},{id:4,item:'通信費',amount:0},{id:5,item:'リース・設備費',amount:0},{id:6,item:'保険料',amount:0},{id:7,item:'広告宣伝費',amount:0}];
+function ensF(y,m){const d=gM(y,m);if(!d.fixed||d.fixed.length===0)d.fixed=DEF_FIXED.map(f=>({...f}));}
+function fmt(n){return'¥'+Math.round(n).toLocaleString('ja-JP');}
+function chM(d){cM+=d;if(cM<0){cM=11;cY--;}if(cM>11){cM=0;cY++;}fyY=fiscalYearForMonth(cY,cM);updateHeader();refresh();}
+function updateHeader(){document.getElementById('mlbl').textContent=cY+'年'+MONTHS[cM];}
+function getZeroCostItems(){return genkaMaster.filter(g=>g.cost===0);}
+
+/* ---- 集計 ---- */
+function calcTotals(){
+  const m=gM();ensF();
+  const arSales=(m.airregiSales||[]).reduce((a,r)=>a+r.amount,0);
+  const arCogs=(m.airregiSales||[]).reduce((a,r)=>a+(r.cogs||0),0);
+  const teba=(m.airregiSales||[]).reduce((a,r)=>a+(r.teba||0),0);
+  const byProduct=(m.airregiSales||[]).map(r=>({name:r.item,qty:r.qty||1,sales:r.amount,cogs:r.cogs||0}));
+  const evSales=(m.events||[]).reduce((a,e)=>a+e.totalSales,0);
+  const evCogs=(m.events||[]).reduce((a,e)=>a+e.totalCogs,0);
+  const evExp=(m.events||[]).reduce((a,e)=>a+e.totalExp,0);
+  const sales=arSales+evSales;
+  const cogs=arCogs+evCogs+evExp;
+  const fixed=m.fixed.reduce((a,r)=>a+r.amount,0);
+  const gross=sales-cogs;const op=gross-fixed;
+  return{sales,arSales,evSales,arCogs,evCogs,evExp,cogs,fixed,gross,op,teba,byProduct};
+}
+
+function calcTotalsByData(m){
+  m=m||{airregiSales:[],events:[],fixed:[]};
+  const arSales=(m.airregiSales||[]).reduce((a,r)=>a+r.amount,0);
+  const arCogs=(m.airregiSales||[]).reduce((a,r)=>a+(r.cogs||0),0);
+  const evSales=(m.events||[]).reduce((a,e)=>a+e.totalSales,0);
+  const evCogs=(m.events||[]).reduce((a,e)=>a+e.totalCogs,0);
+  const evExp=(m.events||[]).reduce((a,e)=>a+e.totalExp,0);
+  const fixed=(m.fixed||[]).reduce((a,r)=>a+r.amount,0);
+  const sales=arSales+evSales;
+  const cogs=arCogs+evCogs+evExp;
+  const gross=sales-cogs;
+  const op=gross-fixed;
+  return{sales,cogs,fixed,gross,op};
+}
+function fiscalYearForMonth(y,m){return m>=9?y+1:y;}
+let fyY=fiscalYearForMonth(cY,cM);
+function calcFiscalYearTotals(targetYear){
+  const months=[];
+  for(let m=9;m<=11;m++)months.push({y:targetYear-1,m});
+  for(let m=0;m<=8;m++)months.push({y:targetYear,m});
+  const totals={sales:0,cogs:0,fixed:0,gross:0,op:0,months:[]};
+  months.forEach(({y,m})=>{
+    const t=calcTotalsByData(DB[mkKey(y,m)]);
+    totals.sales+=t.sales; totals.cogs+=t.cogs; totals.fixed+=t.fixed; totals.gross+=t.gross; totals.op+=t.op;
+    totals.months.push({y,m,...t});
+  });
+  return totals;
+}
+function chFY(d){fyY+=d;renderFY();}
+function setCurrentFY(){fyY=fiscalYearForMonth(cY,cM);renderFY();}
+function renderFY(){
+  const t=calcFiscalYearTotals(fyY);
+  document.getElementById('fy-title').textContent=fyY+'年度 合計';
+  document.getElementById('fy-range').textContent=(fyY-1)+'年10月〜'+fyY+'年9月';
+  document.getElementById('fy-sales').textContent=fmt(t.sales);
+  document.getElementById('fy-cogs').textContent=fmt(t.cogs);
+  document.getElementById('fy-fixed').textContent=fmt(t.fixed);
+  const p=document.getElementById('fy-profit');p.textContent=fmt(t.op);p.className='annual-mini-v '+(t.op>=0?'green':'red');
+  document.getElementById('fy-month-rows').innerHTML=t.months.map(r=>`<tr><td>${r.y}年${MONTHS[r.m]}</td><td style="text-align:right">${fmt(r.sales)}</td><td style="text-align:right;color:#c0581a">${fmt(r.cogs)}</td><td style="text-align:right;color:#c0581a">${fmt(r.fixed)}</td><td style="text-align:right;color:${r.op>=0?'#2a7a3b':'#c0392b'}">${fmt(r.op)}</td></tr>`).join('');
+}
+
+/* ---- タブ ---- */
+function sw(name){
+  ['summary','fiscal','airregi','event','mapping','genka','fixed','pl'].forEach(t=>{document.getElementById('tab-'+t).style.display=t===name?'':'none';});
+  document.querySelectorAll('.tab').forEach((el,i)=>{el.classList.toggle('active',['summary','fiscal','airregi','event','mapping','genka','fixed','pl'][i]===name);});
+  if(name==='summary')renderSummary();
+  if(name==='fiscal')renderFY();
+  if(name==='airregi')renderAirregi();
+  if(name==='event')renderEventTab();
+  if(name==='mapping')renderMapping();
+  if(name==='genka')renderGenka();
+  if(name==='fixed'){ensF();renderFixed();}
+  if(name==='pl')renderPL();
+}
+
+/* ---- サマリー ---- */
+function renderSummary(){
+  const t=calcTotals();
+  const zero=getZeroCostItems();
+  document.getElementById('warn-area').innerHTML=zero.length>0?`<div class="warn-banner">原価未設定の商品が ${zero.length} 件あります（${zero.map(g=>g.name).join('、')}）。<button class="btn btn-sm" onclick="sw('genka')">原価を設定する</button></div>`:'';
+  document.getElementById('s-sales').textContent=fmt(t.sales);
+  document.getElementById('s-cogs').textContent=fmt(t.cogs);
+  document.getElementById('s-fixed').textContent=fmt(t.fixed);
+  const g=document.getElementById('s-gross');g.textContent=fmt(t.gross);g.className='mc-v '+(t.gross>=0?'green':'red');
+  const o=document.getElementById('s-op');o.textContent=fmt(t.op);o.className='mc-v '+(t.op>=0?'green':'red');
+  const rate=t.sales>0?(t.op/t.sales*100):0;
+  const r=document.getElementById('s-rate');r.textContent=rate.toFixed(1)+'%';r.className='mc-v '+(rate>=0?'green':'red');
+  document.getElementById('s-ar-sales').textContent=fmt(t.arSales);
+  document.getElementById('s-ev-sales').textContent=fmt(t.evSales);
+  document.getElementById('s-crate').textContent=(t.sales>0?(t.cogs/t.sales*100):0).toFixed(1)+'%';
+  renderRank(t.byProduct);renderTrend();
+}
+function renderRank(bp){const tbody=document.getElementById('rank-body');if(!bp.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--color-text-secondary);padding:12px">データがありません</td></tr>';return;}tbody.innerHTML=[...bp].sort((a,b)=>(b.sales-b.cogs)-(a.sales-a.cogs)).map(p=>{const gr=p.sales-p.cogs;const rv=p.sales>0?(gr/p.sales*100):0;return`<tr><td style="font-size:11px">${p.name}</td><td style="text-align:center">${p.qty}</td><td style="text-align:right">${fmt(p.sales)}</td><td style="text-align:right;color:${gr>=0?'#2a7a3b':'#c0392b'}">${fmt(gr)}</td><td style="text-align:right;font-size:10px">${rv.toFixed(0)}%</td></tr>`;}).join('');}
+function renderTrend(){const labels=[],sD=[],cD=[],pD=[];for(let i=11;i>=0;i--){let m=cM-i,y=cY;while(m<0){m+=12;y--;}labels.push((m+1)+'月');const d=DB[mkKey(y,m)]||{airregiSales:[],events:[],fixed:[]};const s=(d.airregiSales||[]).reduce((a,r)=>a+r.amount,0)+(d.events||[]).reduce((a,e)=>a+e.totalSales,0);const co=(d.airregiSales||[]).reduce((a,r)=>a+(r.cogs||0),0)+(d.events||[]).reduce((a,e)=>a+e.totalCogs+e.totalExp,0);const f=(d.fixed||[]).reduce((a,r)=>a+r.amount,0);sD.push(s);cD.push(co+f);pD.push(s-co-f);}if(trendChart)trendChart.destroy();trendChart=new Chart(document.getElementById('trendChart'),{type:'bar',data:{labels,datasets:[{label:'売上',data:sD,backgroundColor:'#c0581a',borderRadius:3,borderSkipped:false},{label:'費用',data:cD,backgroundColor:'#888780',borderRadius:3,borderSkipped:false},{type:'line',label:'利益',data:pD,borderColor:'#2a7a3b',backgroundColor:'rgba(42,122,59,0.08)',borderWidth:2,pointRadius:3,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{autoSkip:false,font:{size:10}},grid:{display:false}},y:{ticks:{callback:v=>'¥'+(v/1000).toFixed(0)+'k',font:{size:10}},beginAtZero:true}}}});}
+
+/* ---- イベント ---- */
+let evItemRows=[],evExpRows=[],evItemIdSeq=0,evExpIdSeq=0;
+function genkaSelectOpts(sel){return`<option value="">— 選択 —</option>`+genkaMaster.map(g=>`<option value="${g.name}"${g.name===sel?'selected':''}>${g.name}</option>`).join('');}
+function addItemRow(){evItemRows.push({id:++evItemIdSeq,name:'',qty:1,price:0,unitCost:0});renderItemRows();}
+function renderItemRows(){const tbody=document.getElementById('ev-items-body');if(!evItemRows.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--color-text-secondary);font-size:12px;padding:8px">商品行を追加してください</td></tr>';updateEvPreview();return;}tbody.innerHTML=evItemRows.map(row=>`<tr><td><select style="font-size:11px;padding:3px 4px" onchange="onItemSelect(${row.id},this.value)">${genkaSelectOpts(row.name)}</select></td><td><input type="number" value="${row.qty}" min="1" style="width:100%;text-align:center;font-size:12px;padding:3px 4px" onchange="onItemQty(${row.id},this.value)"></td><td><input type="number" value="${row.price}" min="0" style="width:100%;text-align:right;font-size:12px;padding:3px 4px" onchange="onItemPrice(${row.id},this.value)"></td><td class="calc-cell">${fmt(row.qty*row.price)}</td><td class="calc-cell" style="color:#c0581a">${fmt(row.qty*row.unitCost)}</td><td><button class="del-btn" onclick="delItemRow(${row.id})">×</button></td></tr>`).join('');updateEvPreview();}
+function onItemSelect(id,name){const row=evItemRows.find(r=>r.id===id);if(!row)return;row.name=name;const g=genkaMaster.find(x=>x.name===name);if(g){row.unitCost=g.cost;if(!row.price&&g.price)row.price=g.price;}renderItemRows();}
+function onItemQty(id,v){const row=evItemRows.find(r=>r.id===id);if(row){row.qty=parseInt(v)||0;renderItemRows();}}
+function onItemPrice(id,v){const row=evItemRows.find(r=>r.id===id);if(row){row.price=parseInt(v)||0;updateEvPreview();}}
+function delItemRow(id){evItemRows=evItemRows.filter(r=>r.id!==id);renderItemRows();}
+function addExpenseRow(){evExpRows.push({id:++evExpIdSeq,type:EXPENSE_TYPES[0],amount:0});renderExpenseRows();}
+function renderExpenseRows(){const el=document.getElementById('ev-expenses-body');if(!evExpRows.length){el.innerHTML='<p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">経費行を追加してください</p>';updateEvPreview();return;}el.innerHTML=evExpRows.map(row=>`<div class="expense-row"><select style="flex:0 0 140px;font-size:12px;padding:4px 6px" onchange="onExpType(${row.id},this.value)">${EXPENSE_TYPES.map(t=>`<option value="${t}"${t===row.type?'selected':''}>${t}</option>`).join('')}</select><input type="number" value="${row.amount}" min="0" placeholder="0" style="flex:1;font-size:12px;padding:4px 6px;text-align:right" onchange="onExpAmt(${row.id},this.value)"><button class="del-btn" onclick="delExpRow(${row.id})">×</button></div>`).join('');updateEvPreview();}
+function onExpType(id,v){const r=evExpRows.find(r=>r.id===id);if(r)r.type=v;}
+function onExpAmt(id,v){const r=evExpRows.find(r=>r.id===id);if(r){r.amount=parseInt(v)||0;updateEvPreview();}}
+function delExpRow(id){evExpRows=evExpRows.filter(r=>r.id!==id);renderExpenseRows();}
+function updateEvPreview(){const sales=evItemRows.reduce((a,r)=>a+r.qty*r.price,0);const cogs=evItemRows.reduce((a,r)=>a+r.qty*r.unitCost,0);const exp=evExpRows.reduce((a,r)=>a+r.amount,0);const profit=sales-cogs-exp;document.getElementById('prev-sales').textContent=fmt(sales);document.getElementById('prev-cogs').textContent=fmt(cogs);document.getElementById('prev-exp').textContent=fmt(exp);const el=document.getElementById('prev-profit');el.textContent=fmt(profit);el.style.color=profit>=0?'#2a7a3b':'#c0392b';}
+function saveEvent(){const name=document.getElementById('ev-name').value||'イベント';const date=document.getElementById('ev-date').value||'';const memo=document.getElementById('ev-memo').value||'';if(!evItemRows.length&&!evExpRows.length){alert('商品行か経費行を追加してください');return;}const totalSales=evItemRows.reduce((a,r)=>a+r.qty*r.price,0);const totalCogs=evItemRows.reduce((a,r)=>a+r.qty*r.unitCost,0);const totalExp=evExpRows.reduce((a,r)=>a+r.amount,0);const m=gM();if(!m.events)m.events=[];m.events.push({id:Date.now(),name,date,memo,items:evItemRows.map(r=>({name:r.name,qty:r.qty,price:r.price,unitCost:r.unitCost})),expenses:evExpRows.map(r=>({type:r.type,amount:r.amount})),totalSales,totalCogs,totalExp});evItemRows=[];evExpRows=[];evItemIdSeq=0;evExpIdSeq=0;['ev-name','ev-date','ev-memo'].forEach(id=>document.getElementById(id).value='');renderItemRows();renderExpenseRows();renderEvList();saveData();toast(name+'を登録しました');}
+function renderEventTab(){renderItemRows();renderExpenseRows();renderEvList();}
+function renderEvList(){const m=gM();const events=m.events||[];const el=document.getElementById('ev-list-wrap');if(!events.length){el.innerHTML='';return;}el.innerHTML=`<div class="sl" style="margin-top:4px">今月の登録済みイベント</div>`+events.map(ev=>{const profit=ev.totalSales-ev.totalCogs-ev.totalExp;const itemRows=ev.items.map(it=>`<tr><td style="font-size:11px;padding-left:4px">${it.name||'—'}</td><td style="text-align:center">${it.qty}</td><td style="text-align:right">${fmt(it.price)}</td><td style="text-align:right">${fmt(it.qty*it.price)}</td><td style="text-align:right;color:#c0581a">${fmt(it.qty*it.unitCost)}</td></tr>`).join('');const expRows=ev.expenses.map(e=>`<tr><td style="font-size:11px;padding-left:4px;color:var(--color-text-secondary)">${e.type}</td><td colspan="3"></td><td style="text-align:right;color:#c0581a">${fmt(e.amount)}</td></tr>`).join('');return`<div class="ev-card"><div class="ev-card-hdr"><div style="display:flex;align-items:center;gap:8px"><span class="ev-badge">${ev.date||'日付なし'}</span><span class="ev-card-title">${ev.name}</span></div><button class="del-btn" onclick="delEvent(${ev.id})">×</button></div>${ev.memo?`<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">${ev.memo}</div>`:''}<table class="item-row-tbl" style="margin-bottom:4px"><thead><tr><th style="width:34%">商品</th><th style="width:13%">数量</th><th style="width:17%">売価</th><th style="width:18%">売上</th><th style="width:18%">原価</th></tr></thead><tbody>${itemRows}${expRows}</tbody></table><div class="ev-mini-grid"><div class="ev-mini"><div class="ev-mini-l">売上</div><div class="ev-mini-v" style="color:#7b5ea7">${fmt(ev.totalSales)}</div></div><div class="ev-mini"><div class="ev-mini-l">商品原価</div><div class="ev-mini-v" style="color:#c0581a">${fmt(ev.totalCogs)}</div></div><div class="ev-mini"><div class="ev-mini-l">その他経費</div><div class="ev-mini-v" style="color:#c0581a">${fmt(ev.totalExp)}</div></div><div class="ev-mini"><div class="ev-mini-l">イベント利益</div><div class="ev-mini-v" style="color:${profit>=0?'#2a7a3b':'#c0392b'}">${fmt(profit)}</div></div></div></div>`;}).join('');}
+function delEvent(id){if(!confirm('このイベントを削除しますか？'))return;const m=gM();m.events=(m.events||[]).filter(e=>e.id!==id);saveData();renderEvList();}
+
+/* =============================================
+   エアレジCSV取込 （v12 完全リニューアル）
+   ① Shift_JIS / UTF-8 自動判定
+   ② ファイル名から年月を取得（最優先）
+   ③ 列名の柔軟対応
+   ④ 商品名の自動変換ルール
+   ⑤ 手羽の日の混同防止
+   ============================================= */
+
+/* ---- 商品名自動変換ルール ---- */
+/* 自動変換しない（未マッチ扱い）商品名パターン
+   → プレビューで手動紐づけさせる */
+const SKIP_AUTO_CONVERT = [
+  /^\d[\d,，]+円$/,        // 「2,300円」「350円」など金額だけの名前
+  /^戸田塩$/,              // 塩単体かポテトか不明
+  /^ビニル袋$/,            // 資材系
+  /^アルコール/,           // ドリンク系
+];
+
+const NAME_RULES = [
+  // ===== 手羽の日（"手羽の日"を含む場合のみ → 手羽の日マスタ。混同厳禁）=====
+  { test: n => /手羽の日/.test(n) && /30本/.test(n),  master: '手羽の日（30本）' },
+  { test: n => /手羽の日/.test(n) && /20本/.test(n),  master: '手羽の日（20本）' },
+  { test: n => /手羽の日/.test(n) && /15本/.test(n),  master: '手羽の日（15本）' },
+  { test: n => /手羽の日/.test(n) && /10本/.test(n),  master: '手羽の日（10本）' },
+  { test: n => /手羽の日/.test(n) && /5本/.test(n),   master: '手羽の日（5本）'  },
+  { test: n => /手羽の日/.test(n) && /1本/.test(n),   master: '手羽の日（1本）'  },
+  // ===== 通常手羽先（"手羽の日"を含まない "〇本" 表記）=====
+  // 「30本」「20本」など単独の本数表記 → 手羽先
+  { test: n => !/手羽の日/.test(n) && /30本/.test(n), master: '手羽先（30本）' },
+  { test: n => !/手羽の日/.test(n) && /20本/.test(n), master: '手羽先（20本）' },
+  { test: n => !/手羽の日/.test(n) && /15本/.test(n), master: '手羽先（15本）' },
+  { test: n => !/手羽の日/.test(n) && /10本/.test(n), master: '手羽先（10本）' },
+  { test: n => !/手羽の日/.test(n) && /5本/.test(n),  master: '手羽先（5本）'  },
+  // 「1本(@160)」「1本(@170)」など価格付き1本表記 → 手羽先（1本）
+  { test: n => !/手羽の日/.test(n) && /1本/.test(n),  master: '手羽先（1本）'  },
+  // ===== 冷凍手羽（「冷凍140円」など冷凍を含むもの）=====
+  { test: n => /冷凍/.test(n),                          master: '冷凍手羽'          },
+  // ===== とり皮（鶏皮揚げ・とり皮 両表記対応）=====
+  { test: n => /鶏皮|とり皮/.test(n),                   master: 'とり皮揚げ'        },
+  // ===== ポテト =====
+  { test: n => /ポテト/.test(n) && /大/.test(n),        master: '戸田塩ポテト（大）'},
+  { test: n => /ポテト/.test(n) && /中/.test(n),        master: '戸田塩ポテト（中）'},
+  // ===== えびせん =====
+  { test: n => /えびせん/.test(n),                       master: 'えびせん'          },
+  // ===== かま屋セット =====
+  { test: n => /かま屋/.test(n) && /セット/.test(n),    master: 'かま屋セット'      },
+  // ===== ちょい飲み =====
+  { test: n => /ちょい飲み/.test(n) && /大/.test(n),    master: 'ちょい飲みセット大'},
+  { test: n => /ちょい飲み/.test(n),                     master: 'ちょい飲みセット中'},
+];
+
+/* 商品名 → 原価マスタ名に変換
+   SKIP_AUTO_CONVERT に該当する場合は変換せず元の名前を返す（未マッチ扱い） */
+function autoConvertName(rawName) {
+  const n = rawName.trim();
+  // スキップリストに該当 → 自動変換しない（プレビューで手動紐づけ）
+  for (const pat of SKIP_AUTO_CONVERT) {
+    if (pat.test(n)) return n; // 変換なし
+  }
+  for (const rule of NAME_RULES) {
+    try { if (rule.test(n)) return rule.master; } catch(e) {}
+  }
+  return n;
+}
+
+/* ---- ファイル名から年月を取得 ---- */
+function detectMonthFromFilename(filename) {
+  // 「商品別売上_20260301-20260331.csv」など
+  const m = filename.match(/(\d{4})(\d{2})(\d{2})/);
+  if (m) {
+    const y = parseInt(m[1]);
+    const mo = parseInt(m[2]) - 1;
+    if (y >= 2020 && y <= 2035 && mo >= 0 && mo <= 11) return { year: y, month: mo };
+  }
+  return null;
+}
+
+/* ---- CSV本文から年月を取得（フォールバック） ---- */
+function detectMonthFromText(text) {
+  const pat = /(\d{4})[\/\-年](\d{1,2})[\/\-月]/g;
+  const mc = {};
+  for (const line of text.split('\n').slice(0, 20)) {
+    pat.lastIndex = 0; let m;
+    while ((m = pat.exec(line)) !== null) {
+      const y = parseInt(m[1]), mo = parseInt(m[2]) - 1;
+      if (y >= 2020 && y <= 2035 && mo >= 0 && mo <= 11) {
+        const k = y + '-' + mo; mc[k] = (mc[k] || 0) + 1;
+      }
+    }
+  }
+  if (!Object.keys(mc).length) return null;
+  const best = Object.entries(mc).sort((a, b) => b[1] - a[1])[0];
+  const [y, mo] = best[0].split('-').map(Number);
+  return { year: y, month: mo };
+}
+
+/* ---- Shift_JIS バイト列 → 文字列変換 ---- */
+function decodeSjis(buffer) {
+  try {
+    return new TextDecoder('shift_jis').decode(buffer);
+  } catch (e) {
+    return new TextDecoder('cp932').decode(buffer);
+  }
+}
+
+/* ---- 文字化け判定（Shift_JIS試行） ---- */
+function looksGarbled(text) {
+  // 文字化けの典型パターン：置換文字(U+FFFD)が多い、または期待される日本語ヘッダがない
+  const replacements = (text.match(/\ufffd/g) || []).length;
+  if (replacements > 3) return true;
+  // 「商品名」「売上」などが全く見当たらない場合も疑わしい
+  if (!/商品|売上|数量|販売/.test(text.slice(0, 500))) return true;
+  return false;
+}
+
+/* ---- ファイル読み込みエントリポイント ---- */
+function onDrag(e){e.preventDefault();document.getElementById('drop-zone').classList.add('drag');}
+function offDrag(){document.getElementById('drop-zone').classList.remove('drag');}
+function onDrop(e){e.preventDefault();offDrag();const f=e.dataTransfer.files[0];if(f)handleFile(f);}
+
+function handleFile(file) {
+  if (!file || !file.name.endsWith('.csv')) { showStatus('CSVファイルを選択してください','err'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    let text = new TextDecoder('utf-8').decode(e.target.result);
+    if (looksGarbled(text)) {
+      // UTF-8で文字化け → Shift_JISで再読み込み
+      text = decodeSjis(e.target.result);
+    }
+    processCSVText(text, file.name);
+  };
+  reader.readAsArrayBuffer(file); // ArrayBufferで読み込んで文字コードを判定
+}
+
+let pendingAction = null;
+
+function processCSVText(text, filename) {
+  hideMonthConfirm();
+  document.getElementById('import-preview').style.display = 'none';
+
+  // ① ファイル名から年月取得（最優先）
+  let det = filename ? detectMonthFromFilename(filename) : null;
+  // ② フォールバック：本文から検索
+  if (!det) det = detectMonthFromText(text);
+
+  if (det && !(det.year === cY && det.month === cM)) {
+    pendingYear = det.year; pendingMonth = det.month;
+    const dl = det.year + '年' + MONTHS[det.month], cl = cY + '年' + MONTHS[cM];
+    showMonthConfirm(
+      `CSVは ${dl} のデータです（現在: ${cl}）。${dl} として取り込みますか？`,
+      () => parseAndShow(text, pendingYear, pendingMonth)
+    );
+  } else {
+    parseAndShow(text, cY, cM);
+  }
+}
+
+function showMonthConfirm(msg, action) {
+  pendingAction = action;
+  document.getElementById('month-confirm-msg').textContent = msg;
+  document.getElementById('month-yes-btn').onclick = () => { hideMonthConfirm(); if (pendingAction) pendingAction(); };
+  document.getElementById('month-confirm').style.display = 'flex';
+}
+function hideMonthConfirm() { document.getElementById('month-confirm').style.display = 'none'; }
+
+/* ---- CSV解析・プレビュー表示 ---- */
+function parseCSVLine(line) {
+  const r = []; let c = '', q = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') q = !q;
+    else if (ch === ',' && !q) { r.push(c); c = ''; }
+    else c += ch;
+  }
+  r.push(c); return r;
+}
+
+function findCol(hdr, candidates) {
+  // Pass1: 完全一致（前後の空白・引用符を除去して比較）
+  for (const c of candidates) {
+    const i = hdr.findIndex(h => h.replace(/[\s\u3000"]/g, '') === c);
+    if (i >= 0) return i;
+  }
+  // Pass2: 前方一致
+  for (const c of candidates) {
+    const i = hdr.findIndex(h => h.replace(/[\s\u3000"]/g, '').startsWith(c));
+    if (i >= 0) return i;
+  }
+  // Pass3: 部分一致（フォールバック）
+  for (const c of candidates) {
+    const i = hdr.findIndex(h => h.replace(/[\s\u3000"]/g, '').includes(c));
+    if (i >= 0) return i;
+  }
+  return -1;
+}
+
+function parseAndShow(text, tY, tM) {
+  const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').filter(l => l.trim());
+  if (lines.length < 2) { showStatus('データが見つかりませんでした', 'err'); return; }
+
+  const hdr = parseCSVLine(lines[0]);
+  const nIdx = findCol(hdr, ['商品名', '品目', 'name', '商品']);
+  const aIdx = findCol(hdr, ['販売総売上', '売上金額', '売上', '金額', '税込売上', '売上(税込)', '売上（税込）']);
+  const qIdx = findCol(hdr, ['販売商品数', '販売数量', '商品数', '数量', '販売数', '個数', 'qty']);
+
+  if (nIdx < 0 || aIdx < 0) { showStatus('CSVの形式が合いません（「商品名」「売上」列が見つかりません）', 'err'); return; }
+
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = parseCSVLine(lines[i]);
+    if (!cols[nIdx]) continue;
+    const rawName = cols[nIdx].replace(/^["']|["']$/g, '').trim();
+    if (!rawName) continue;
+    const amount = parseInt((cols[aIdx] || '').replace(/[,，¥"\s]/g, '')) || 0;
+    const qty = qIdx >= 0 ? (parseInt((cols[qIdx] || '').replace(/[,，"]/g, '')) || 1) : 1;
+    if (amount === 0 && qty === 0) continue;
+
+    // 商品名を自動変換
+    const convertedName = autoConvertName(rawName);
+    const { genka, method } = matchGenka(convertedName);
+    // 変換後にもマッチしなければ元の名前でも試みる
+    let finalGenka = genka, finalMethod = method;
+    if (!genka) {
+      const r2 = matchGenka(rawName);
+      if (r2.genka) { finalGenka = r2.genka; finalMethod = r2.method; }
+    }
+
+    rows.push({
+      rawName,           // CSV上の元の名前（表示用）
+      name: convertedName, // 変換後の名前（マスタ照合・保存用）
+      amount, qty,
+      genka: finalGenka,
+      method: finalMethod,
+      cogs: finalGenka ? Math.round(finalGenka.cost * qty) : null,
+      teba: finalGenka ? finalGenka.teba * qty : 0,
+      converted: convertedName !== rawName // 変換されたかどうか
+    });
+  }
+
+  if (!rows.length) { showStatus('取込可能なデータがありませんでした', 'err'); return; }
+
+  pendingImport = rows; pendingYear = tY; pendingMonth = tM;
+  const un = rows.filter(r => r.method === 'none').length;
+  showStatus(
+    `${tY}年${MONTHS[tM]}として ${rows.length}件読込。自動マッチ: ${rows.length - un}件 ／ 未マッチ: ${un}件${un > 0 ? ' ← プルダウンで紐づけ' : ''}`,
+    un > 0 ? 'warn' : 'ok'
+  );
+
+  document.querySelector('#preview-tbl tbody').innerHTML = rows.map((r, i) => `
+    <tr>
+      <td style="font-size:11px">
+        ${r.rawName}
+        ${r.converted ? `<div style="font-size:10px;color:#7b5ea7">→ ${r.name}</div>` : ''}
+      </td>
+      <td style="text-align:center">${r.qty}</td>
+      <td style="text-align:right">${fmt(r.amount)}</td>
+      <td>${methodLabel(r.method)}</td>
+      <td>
+        <select id="sel-${i}" style="font-size:11px;padding:3px 4px" onchange="updPend(${i},this.value)">
+          <option value="">— 原価なし —</option>
+          ${genkaMaster.map(g => `<option value="${g.name}"${r.genka && r.genka.name === g.name ? ' selected' : ''}>${g.name}（${fmt(g.cost)}）</option>`).join('')}
+        </select>
+      </td>
+    </tr>`).join('');
+
+  document.getElementById('import-preview').style.display = '';
+}
+
+function updPend(i, mn) {
+  const g = mn ? genkaMaster.find(x => x.name === mn) : null;
+  pendingImport[i].genka = g;
+  pendingImport[i].cogs = g ? Math.round(g.cost * pendingImport[i].qty) : null;
+  pendingImport[i].teba = g ? g.teba * pendingImport[i].qty : 0;
+  if (g && pendingImport[i].method === 'none') pendingImport[i].method = 'saved';
+}
+
+function confirmImport() {
+  const nm = {};
+  pendingImport.forEach(r => {
+    if (r.genka && r.method !== 'exact') nm[r.name] = r.genka.name;
+  });
+  Object.assign(savedMapping, nm);
+  const tY = pendingYear !== null ? pendingYear : cY;
+  const tM = pendingMonth !== null ? pendingMonth : cM;
+  ensF(tY, tM);
+  gM(tY, tM).airregiSales = pendingImport.map(r => ({
+    id: Date.now() + Math.random(),
+    item: r.name,         // 変換後の名前で保存
+    rawItem: r.rawName,   // 元のCSV名も保持
+    amount: r.amount, qty: r.qty,
+    cogs: r.cogs || 0, teba: r.teba || 0,
+    method: r.method, masterName: r.genka ? r.genka.name : null
+  }));
+  if (tY !== cY || tM !== cM) { cY = tY; cM = tM; updateHeader(); }
+  pendingImport = []; pendingYear = null; pendingMonth = null;
+  document.getElementById('import-preview').style.display = 'none';
+  showStatus(`${cY}年${MONTHS[cM]}として反映完了。`, 'ok');
+  renderAirregi(); saveData(); toast(cY + '年' + MONTHS[cM] + 'のデータを反映しました');
+}
+
+function cancelImport() {
+  pendingImport = []; pendingYear = null; pendingMonth = null;
+  document.getElementById('import-preview').style.display = 'none';
+  hideMonthConfirm();
+}
+
+function showStatus(msg, type) {
+  const el = document.getElementById('up-status');
+  el.textContent = msg;
+  el.className = 'up-st ' + (type === 'ok' ? 'st-ok' : type === 'warn' ? 'st-warn' : type === 'info' ? 'st-info' : 'st-err');
+  el.style.display = msg ? 'block' : 'none';
+}
+
+function renderAirregi() {
+  const m = gM(); const el = document.getElementById('ar-imported');
+  if (!m.airregiSales || !m.airregiSales.length) {
+    el.innerHTML = '<p style="font-size:13px;color:var(--color-text-secondary);padding:8px 0">まだ取込がありません</p>'; return;
+  }
+  const tS = m.airregiSales.reduce((a, r) => a + r.amount, 0);
+  const tC = m.airregiSales.reduce((a, r) => a + (r.cogs || 0), 0);
+  const tT = m.airregiSales.reduce((a, r) => a + (r.teba || 0), 0);
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:12px;color:var(--color-text-secondary)">${m.airregiSales.length}商品 / 手羽先${tT}本</span>
+      <button class="btn btn-sm" onclick="clearAR()">クリア</button>
+    </div>
+    <div style="max-height:220px;overflow-y:auto">
+    <table class="ct">
+      <thead><tr>
+        <th style="width:30%">商品名</th>
+        <th style="width:10%">数量</th>
+        <th style="width:18%">売上</th>
+        <th style="width:18%">原価</th>
+        <th style="width:24%">マッチ</th>
+      </tr></thead>
+      <tbody>${m.airregiSales.map(r => `
+        <tr>
+          <td style="font-size:11px">
+            ${r.item}
+            ${r.rawItem && r.rawItem !== r.item ? `<div style="font-size:10px;color:#888">元: ${r.rawItem}</div>` : ''}
+          </td>
+          <td style="text-align:center">${r.qty}</td>
+          <td style="text-align:right">${fmt(r.amount)}</td>
+          <td style="text-align:right;color:#c0581a">${r.cogs ? fmt(r.cogs) : '—'}</td>
+          <td>${methodLabel(r.method || 'exact')}</td>
+        </tr>`).join('')}
+      </tbody>
+      <tfoot><tr class="sr">
+        <td colspan="2">合計</td>
+        <td style="text-align:right">${fmt(tS)}</td>
+        <td style="text-align:right;color:#c0581a">${fmt(tC)}</td>
+        <td></td>
+      </tr></tfoot>
+    </table></div>`;
+}
+
+function clearAR() { if (!confirm('取込データを削除しますか？')) return; gM().airregiSales = []; saveData(); renderAirregi(); }
+function renderMapping(){const el=document.getElementById('mapping-list');const keys=Object.keys(savedMapping);if(!keys.length){el.innerHTML='<p style="font-size:13px;color:var(--color-text-secondary);padding:8px 0">保存済みの紐づけはありません。</p>';return;}el.innerHTML=`<table class="ct"><thead><tr><th style="width:42%">CSV商品名</th><th style="width:42%">紐づけ先</th><th style="width:16%"></th></tr></thead><tbody>${keys.map(k=>`<tr><td style="font-size:11px">${k}</td><td style="font-size:11px;color:#c0581a">${savedMapping[k]}</td><td><button class="del-btn" onclick="delMap(${JSON.stringify(k)})">×</button></td></tr>`).join('')}</tbody></table><div class="br"><button class="btn" onclick="if(confirm('全削除しますか？')){savedMapping={};renderMapping();}">全削除</button></div>`;}
+function delMap(k){delete savedMapping[k];renderMapping();}
+
+/* ---- 原価マスタ表示 ---- */
+function renderGenka(){
+  const zero=getZeroCostItems();
+  document.getElementById('genka-warn-area').innerHTML=zero.length>0?`<div class="warn-banner" style="margin-bottom:10px">以下の商品は原価が未設定（¥0）です：${zero.map(g=>`<strong>${g.name}</strong>`).join('、')}。</div>`:'';
+  document.getElementById('genka-list').innerHTML=genkaMaster.map(g=>{
+    const isMissing=g.cost===0;
+    const r=g.price>0?(g.cost/g.price*100):0;const gross=g.price-g.cost;
+    return`<div class="genka-card" style="${isMissing?'border-color:#f5c475;border-left:3px solid #e9a42a':''}">
+      <div class="genka-name">${g.name}${isMissing?'<span style="font-size:10px;color:#854f0b;background:#faeeda;padding:2px 6px;border-radius:20px;margin-left:6px">原価未設定</span>':''}${g.teba>0?`<span style="font-size:10px;color:var(--color-text-secondary);font-weight:400;margin-left:6px">手羽${g.teba}本</span>`:''}</div>
+      <div class="genka-row"><span>販売価格</span><span>${g.price?fmt(g.price):'未設定'}</span></div>
+      <div class="genka-row"><span>原価</span><span style="color:${isMissing?'#c0392b':'#c0581a'}">${isMissing?'未設定':fmt(g.cost)}</span></div>
+      ${g.price&&!isMissing?`<div class="genka-row"><span>粗利</span><span style="color:#2a7a3b">${fmt(gross)}</span></div><div class="genka-row"><span>原価率</span><span>${r.toFixed(1)}%</span></div><div class="rate-bar-bg"><div class="rate-bar" style="width:${Math.min(r,100)}%"></div></div>`:''}
+      <div style="text-align:right;margin-top:4px"><button class="del-btn" onclick="editGenka(${JSON.stringify(g.name)})" style="font-size:11px;color:var(--color-text-secondary)">編集</button><button class="del-btn" onclick="delGenka(${JSON.stringify(g.name)})">×</button></div>
+    </div>`;
+  }).join('');
+}
+function addGenka(){const name=document.getElementById('g-name').value.trim();const price=parseInt(document.getElementById('g-price').value)||0;const cost=parseInt(document.getElementById('g-cost').value)||0;const teba=parseInt(document.getElementById('g-qty').value)||0;if(!name){alert('商品名は必須です');return;}const idx=genkaMaster.findIndex(g=>g.name===name);if(idx>=0)genkaMaster[idx]={name,price,cost,teba};else genkaMaster.push({name,price,cost,teba});['g-name','g-price','g-cost','g-qty'].forEach(id=>document.getElementById(id).value='');saveData();renderGenka();toast(name+'を登録しました');}
+function editGenka(name){const g=genkaMaster.find(x=>x.name===name);if(!g)return;document.getElementById('g-name').value=g.name;document.getElementById('g-price').value=g.price;document.getElementById('g-cost').value=g.cost;document.getElementById('g-qty').value=g.teba;document.getElementById('tab-genka').scrollTop=9999;}
+function delGenka(name){if(!confirm(`「${name}」を削除しますか？`))return;genkaMaster=genkaMaster.filter(g=>g.name!==name);saveData();renderGenka();}
+
+/* ---- 固定費 ---- */
+function renderFixed(){ensF();const m=gM();document.getElementById('fixed-body').innerHTML=m.fixed.map(r=>`<tr><td>${r.item}</td><td><input type="number" value="${r.amount}" min="0" style="width:100%;padding:4px 8px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:6px;background:var(--color-background-primary);color:var(--color-text-primary)" onchange="updF(${r.id},this.value)"></td><td style="text-align:center"><button class="del-btn" onclick="delF(${r.id})">×</button></td></tr>`).join('');document.getElementById('fixed-total').textContent=fmt(m.fixed.reduce((a,r)=>a+r.amount,0));}
+function updF(id,v){const r=gM().fixed.find(f=>f.id===id);if(r)r.amount=parseInt(v)||0;document.getElementById('fixed-total').textContent=fmt(gM().fixed.reduce((a,r)=>a+r.amount,0));saveData();}
+function addFixed(){const item=document.getElementById('fi-item').value;const amount=parseInt(document.getElementById('fi-amount').value)||0;if(!item)return;gM().fixed.push({id:Date.now(),item,amount});['fi-item','fi-amount'].forEach(id=>document.getElementById(id).value='');saveData();renderFixed();}
+function delF(id){gM().fixed=gM().fixed.filter(r=>r.id!==id);saveData();renderFixed();}
+
+/* ---- 損益 ---- */
+function renderPL(){ensF();const t=calcTotals();const m=gM();document.getElementById('pl-ar-sales').textContent=fmt(t.arSales);document.getElementById('pl-ev-sales').textContent=fmt(t.evSales);document.getElementById('pl-sales').textContent=fmt(t.sales);document.getElementById('pl-ar-cogs').textContent='('+fmt(t.arCogs)+')';document.getElementById('pl-ev-cogs').textContent='('+fmt(t.evCogs)+')';document.getElementById('pl-ev-exp').textContent='('+fmt(t.evExp)+')';document.getElementById('pl-cogs').textContent='('+fmt(t.cogs)+')';document.getElementById('pl-gross').textContent=fmt(t.gross);const gr=t.sales>0?(t.gross/t.sales*100):0;document.getElementById('pl-gross-rate').textContent=gr.toFixed(1)+'%';document.getElementById('pl-fixed-rows').innerHTML=m.fixed.filter(f=>f.amount>0).map(f=>`<tr><td style="padding-left:16px">${f.item}</td><td style="text-align:right">(${fmt(f.amount)})</td></tr>`).join('');document.getElementById('pl-fixed-tot').textContent='('+fmt(t.fixed)+')';const p=document.getElementById('pl-profit');p.textContent=fmt(t.op);p.style.color=t.op>=0?'#2a7a3b':'#c0392b';const or=t.sales>0?(t.op/t.sales*100):0;document.getElementById('pl-op-rate').textContent=or.toFixed(1)+'%';}
+
+/* ---- エクスポート ---- */
+function exportCSV(){ensF();const t=calcTotals();const m=gM();let csv='かま屋 月間収支レポート,'+cY+'年'+MONTHS[cM]+'\n\n';csv+='【エアレジ売上・原価】\n商品名,販売数,売上,原価,粗利\n';(m.airregiSales||[]).forEach(r=>{csv+=r.item+','+r.qty+','+r.amount+','+(r.cogs||0)+','+(r.amount-(r.cogs||0))+'\n';});csv+='\n【イベント】\nイベント名,日付,商品,数量,売価,売上,原価\n';(m.events||[]).forEach(ev=>{ev.items.forEach(it=>{csv+=ev.name+','+ev.date+','+it.name+','+it.qty+','+it.price+','+(it.qty*it.price)+','+(it.qty*it.unitCost)+'\n';});ev.expenses.forEach(e=>{csv+=ev.name+','+ev.date+',【経費】'+e.type+',,,,'+e.amount+'\n';});});csv+='\n【固定費】\n費目,金額\n';m.fixed.forEach(r=>{csv+=r.item+','+r.amount+'\n';});csv+='\n【損益サマリー】\nエアレジ売上,'+t.arSales+'\nイベント売上,'+t.evSales+'\n売上合計,'+t.sales+'\nエアレジ原価,'+t.arCogs+'\nイベント商品原価,'+t.evCogs+'\nイベント経費,'+t.evExp+'\n原価合計,'+t.cogs+'\n粗利益,'+t.gross+'\n粗利率,'+(t.sales>0?(t.gross/t.sales*100).toFixed(1):0)+'%\n固定費,'+t.fixed+'\n営業利益,'+t.op+'\n営業利益率,'+(t.sales>0?(t.op/t.sales*100).toFixed(1):0)+'%\n';const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='kamaya_'+mkKey()+'.csv';a.click();URL.revokeObjectURL(url);}
+
+function toast(msg){let t=document.getElementById('tst');if(!t){t=document.createElement('div');t.id='tst';t.style.cssText='position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#f5e6c8;padding:8px 16px;border-radius:8px;font-size:12px;z-index:99;white-space:nowrap';document.querySelector('.app').style.position='relative';document.querySelector('.app').appendChild(t);}t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>{t.style.opacity='0';},2000);}
+function refresh(){const n=['summary','fiscal','airregi','event','mapping','genka','fixed','pl'].find((_,i)=>document.querySelectorAll('.tab')[i].classList.contains('active'))||'summary';sw(n);}
+
+/* =============================================
+   自動保存 / 復元（localStorage）
+   ============================================= */
+function saveData(){
+  try{
+    const data={DB,genkaMaster,savedMapping,cY,cM};
+    localStorage.setItem('kamaya_app_data',JSON.stringify(data));
+  }catch(e){console.warn('saveData failed:',e);}
+}
+
+function loadData(){
+  try{
+    const saved=localStorage.getItem('kamaya_app_data');
+    if(!saved)return;
+    const data=JSON.parse(saved);
+    if(data.DB){Object.assign(DB,data.DB);}
+    if(data.genkaMaster&&data.genkaMaster.length)genkaMaster=data.genkaMaster;
+    if(data.savedMapping)savedMapping=data.savedMapping;
+    if(data.cY)cY=data.cY;
+    if(data.cM!==undefined)cM=data.cM;
+  }catch(e){console.warn('loadData failed:',e);}
+}
+
+function backupData(){
+  try{
+    const data={DB,genkaMaster,savedMapping,cY,cM,exportedAt:new Date().toISOString()};
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='kamaya_backup_'+new Date().toISOString().slice(0,10)+'.json';
+    a.click();URL.revokeObjectURL(url);
+    toast('バックアップをダウンロードしました');
+  }catch(e){alert('バックアップに失敗しました: '+e);}
+}
+
+function restoreFromBackup(file){
+  if(!file||!file.name.endsWith('.json')){alert('JSONファイルを選択してください');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(data.DB)Object.assign(DB,data.DB);
+      if(data.genkaMaster&&data.genkaMaster.length)genkaMaster=data.genkaMaster;
+      if(data.savedMapping)savedMapping=data.savedMapping;
+      if(data.cY)cY=data.cY;
+      if(data.cM!==undefined)cM=data.cM;
+      saveData();
+      updateHeader();refresh();
+      toast('バックアップから復元しました');
+    }catch(err){alert('復元に失敗しました: '+err);}
+  };
+  reader.readAsText(file,'UTF-8');
+}
+
+loadData();
+updateHeader();ensF();renderSummary();
+</script>
